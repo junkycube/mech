@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Mech Game Combat</title>
+
+<style type="text/css">
+
+:root {
+	--fillColor: rgb(255, 165, 0);
+	--borderColor: rgb(230, 230, 230);
+}
+	
+body {
+	font-family: Calibri;
+	background: var(--fillColor);
+}
+
+select {
+	outline: none;
+	font-family: Calibri;
+	background: var(--fillColor);
+	border-color: var(--borderColor);
+}
+
+</style>
+<script type="text/javascript">
+
+let mechFrames = [
+	{
+		'name':'None',
+		'description':'No Frame',
+		'weight':0,
+		'coreSlots':0,
+		'backSlots':0,
+		'armSlots':0,
+		'armSlotsType':0,
+		'legSlots':0,
+		'legSlotsType':0,
+		'shoulderSlots':0
+	},
+	{
+		'name':'V-Frame AA8800',
+		'description':'The V is for Versatile. This humanoid frame gives the pilot the expandable room for up to 12 slots for limbs, and plenty of room for a powerful core.',
+		'weight':400,
+		'coreSlots':6,
+		'backSlots':2,
+		'armSlots':6,
+		'armSlotsType':2,
+		'legSlots':6,
+		'legSlotsType':2,
+		'shoulderSlots':2
+	},
+	{
+		'name':'A-Frame AA8400',
+		'description':'This frame gives up superior mobility of most frames for the stability of a wide base and heavy duty treads. Where it lacks in speed it makes up for it in durability causing most pilots to arm these mech\'s with the strongest of greatshields.',
+		'weight':1200,
+		'coreSlots':10,
+		'backSlots':6,
+		'armSlots':2,
+		'armSlotsType':3,
+		'legSlots':0,
+		'legSlotsType':0,
+		'shoulderSlots':4
+	},
+	{
+		'name':'I-Frame AA8100',
+		'description':'A narrow frame built for speed. Common amongst novice bright-eyed pilots for the flashy movement - most find their mechs in the trash after their first brawl.',
+		'weight':100,
+		'coreSlots':2,
+		'backSlots':1,
+		'armSlots':2,
+		'armSlotsType':1,
+		'legSlots':2,
+		'legSlotsType':1,
+		'shoulderSlots':1
+
+	}
+];
+
+let mechArms = [
+	{
+		'name':'None',
+		'description':'Leave the arm socket empty.',
+		'weight':0,
+		'slotType':0
+	},
+	{
+		'name':'Bladed Arm',
+		'description':'An arm fitted with a long blade as a replacement for the forearm.',
+		'weight':100,
+		'slotType':1
+	},
+	{
+		'name':'Feather Arm',
+		'description':'An unarmored Arm.',
+		'weight':75,
+		'slotType':1
+	},
+	{
+		'name':'Rifle Arm',
+		'description':'A well armored arm fitted with a powerful rifle as a replacement for the forearm.',
+		'weight':200,
+		'slotType':2
+	},
+	{
+		'name':'Basic Arm',
+		'description':'A basic arm with standard armor.',
+		'weight':150,
+		'slotType':2
+	},
+	{
+		'name':'Shield Arm',
+		'description':'A heavily armored arm with a shield built directly onto the forearm.',
+		'weight':400,
+		'slotType':3
+	},
+	{
+		'name':'Cannon Arm',
+		'description':'A havily armored arm with a heavy cannon replacing the forearm.',
+		'weight':400,
+		'slotType':3
+	},
+];
+
+let mechLegs = [
+	{
+		'name':'None',
+		'description':'Leave the leg socket empty.',
+		'weight':0,
+		'slotType':0
+	},
+	{
+		'name':'Ice Picks 2.0',
+		'description':'Lightweight legs giving the mech the illusion of superior precision with their fine pointed ends.',
+		'weight':50,
+		'slotType':1
+	},
+	{
+		'name':'Gliders',
+		'description':'Lightweight leg with glideTech wheels giving the user a surprising amount of control for a ground based mech.',
+		'weight':120,
+		'slotType':1
+	},
+	{
+		'name':'Striders',
+		'description':'A Well armored leg with standard bipedal movement and thrusters for both land and air capabilities.',
+		'weight':150,
+		'slotType':2
+	}
+];
+
+function main() {
+	clearSelects('frameSelect');
+	populateSelect('frameSelect', mechFrames, 'populateSockets(this.value)', 0, 0);
+}
+
+function clearSelects(elementId) {
+	document.getElementById(elementId).innerHTML = '';
+}
+
+function populateSelect(elementId, arrName, trigger, filter, filterVal) {
+	let htmlBuild = '<select onchange="'+trigger+'">';
+	for(i = 0; i < arrName.length; i++) {
+		if(arrName[i][filter] > filterVal) continue;
+		htmlBuild += '<option value="'+i+'">'+arrName[i].name+'</option>';
+	}
+	htmlBuild += '</select>';
+	document.getElementById(elementId).innerHTML += htmlBuild;
+}
+
+function populateSockets(frameId) {
+
+	document.getElementById('frameDescription').innerHTML = mechFrames[frameId].description;
+
+	let arms = mechFrames[frameId].armSlots;
+	let armMax = mechFrames[frameId].armSlotsType;
+	let legs = mechFrames[frameId].legSlots;
+	let legMax = mechFrames[frameId].legSlotsType;
+	clearSelects('frameCustom');
+	if(arms > 0) document.getElementById('frameCustom').innerHTML += '<div>Arms</div>';
+	if(arms > 0) document.getElementById('frameCustom').innerHTML += '<div> Left</div>';
+	for(j = 0; j < arms; j++) {
+		if(j == arms/2) document.getElementById('frameCustom').innerHTML += '<div> Right</div>';
+		populateSelect('frameCustom', mechArms, '', 'slotType', armMax);
+	}
+	if(legs > 0) document.getElementById('frameCustom').innerHTML += '<div>Legs</div>';
+	if(legs > 0) document.getElementById('frameCustom').innerHTML += '<div> Left</div>';
+	for(j = 0; j < legs; j++) {
+		if(j == legs/2) document.getElementById('frameCustom').innerHTML += '<div> Right</div>';
+		populateSelect('frameCustom', mechLegs, '', 'slotType', legMax);
+	}
+}
+
+</script>
+
+
+</head>
+<body>
+
+<div>Frame</div>
+<div id="frameSelect"></div>
+
+<div id="frameDescription"></div>
+
+<div id="frameCustom"></div>
+
+</body>
+<script type="text/javascript">
+	
+main();
+
+</script>
+</html>
